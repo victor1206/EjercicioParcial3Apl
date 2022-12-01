@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBAcademiaNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="clases">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="idhorario" Type="int" Nullable="false" />
+          <Property Name="idprofesor" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cursoDetalle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="idcurso" Type="int" Nullable="false" />
+          <Property Name="descripcion_corta" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="descripcion_larga" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cursos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="nivel" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="descripcion" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="grupos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="idcurso" Type="int" Nullable="false" />
+          <Property Name="cantidad_personas" Type="nchar" MaxLength="60" Nullable="false" />
+          <Property Name="tiempo_duracion" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="horario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id_profesor" Type="int" Nullable="false" />
+          <Property Name="id_grupo" Type="int" Nullable="false" />
+          <Property Name="HorarioN" Type="varchar" MaxLength="60" Nullable="false" />
+        </EntityType>
+        <EntityType Name="niveles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="NombreNivel" Type="nchar" MaxLength="60" Nullable="false" />
+        </EntityType>
+        <EntityType Name="profesores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="secciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="nchar" MaxLength="60" Nullable="false" />
+          <Property Name="id_cursos" Type="int" Nullable="false" />
+          <Property Name="cantidad_cap" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="tiempo duracion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_clases_horariopk">
+          <End Role="horario" Type="Self.horario" Multiplicity="1" />
+          <End Role="clases" Type="Self.clases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="horario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clases">
+              <PropertyRef Name="idhorario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_clases_niveles">
+          <End Role="niveles" Type="Self.niveles" Multiplicity="1" />
+          <End Role="clases" Type="Self.clases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="niveles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clases">
+              <PropertyRef Name="idprofesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_clases_profesor">
+          <End Role="profesores" Type="Self.profesores" Multiplicity="1" />
+          <End Role="clases" Type="Self.clases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="profesores">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clases">
+              <PropertyRef Name="idprofesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursoDetalle_cursos">
+          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+          <End Role="cursoDetalle" Type="Self.cursoDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cursoDetalle">
+              <PropertyRef Name="idcurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_grupos_cursos">
+          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+          <End Role="grupos" Type="Self.grupos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupos">
+              <PropertyRef Name="idcurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_horario_clases">
+          <End Role="profesores" Type="Self.profesores" Multiplicity="1" />
+          <End Role="horario" Type="Self.horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="profesores">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="horario">
+              <PropertyRef Name="id_profesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_horario_grupos">
+          <End Role="grupos" Type="Self.grupos" Multiplicity="1" />
+          <End Role="horario" Type="Self.horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="grupos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="horario">
+              <PropertyRef Name="id_grupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_secciones_cursospks">
+          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+          <End Role="secciones" Type="Self.secciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="secciones">
+              <PropertyRef Name="id_cursos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBAcademiaNModelStoreContainer">
+          <EntitySet Name="clases" EntityType="Self.clases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cursoDetalle" EntityType="Self.cursoDetalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cursos" EntityType="Self.cursos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="grupos" EntityType="Self.grupos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="horario" EntityType="Self.horario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="niveles" EntityType="Self.niveles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="profesores" EntityType="Self.profesores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="secciones" EntityType="Self.secciones" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_clases_horariopk" Association="Self.FK_clases_horariopk">
+            <End Role="horario" EntitySet="horario" />
+            <End Role="clases" EntitySet="clases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_clases_niveles" Association="Self.FK_clases_niveles">
+            <End Role="niveles" EntitySet="niveles" />
+            <End Role="clases" EntitySet="clases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_clases_profesor" Association="Self.FK_clases_profesor">
+            <End Role="profesores" EntitySet="profesores" />
+            <End Role="clases" EntitySet="clases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursoDetalle_cursos" Association="Self.FK_cursoDetalle_cursos">
+            <End Role="cursos" EntitySet="cursos" />
+            <End Role="cursoDetalle" EntitySet="cursoDetalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_grupos_cursos" Association="Self.FK_grupos_cursos">
+            <End Role="cursos" EntitySet="cursos" />
+            <End Role="grupos" EntitySet="grupos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_horario_clases" Association="Self.FK_horario_clases">
+            <End Role="profesores" EntitySet="profesores" />
+            <End Role="horario" EntitySet="horario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_horario_grupos" Association="Self.FK_horario_grupos">
+            <End Role="grupos" EntitySet="grupos" />
+            <End Role="horario" EntitySet="horario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_secciones_cursospks" Association="Self.FK_secciones_cursospks">
+            <End Role="cursos" EntitySet="cursos" />
+            <End Role="secciones" EntitySet="secciones" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBAcademiaNModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="clases">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="idhorario" Type="Int32" Nullable="false" />
+          <Property Name="idprofesor" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="horario" Relationship="Self.FK_clases_horariopk" FromRole="clases" ToRole="horario" />
+          <NavigationProperty Name="niveles" Relationship="Self.FK_clases_niveles" FromRole="clases" ToRole="niveles" />
+          <NavigationProperty Name="profesores" Relationship="Self.FK_clases_profesor" FromRole="clases" ToRole="profesores" />
+        </EntityType>
+        <EntityType Name="cursoDetalle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="idcurso" Type="Int32" Nullable="false" />
+          <Property Name="descripcion_corta" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="descripcion_larga" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="cursos" Relationship="Self.FK_cursoDetalle_cursos" FromRole="cursoDetalle" ToRole="cursos" />
+        </EntityType>
+        <EntityType Name="cursos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="nivel" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="cursoDetalle" Relationship="Self.FK_cursoDetalle_cursos" FromRole="cursos" ToRole="cursoDetalle" />
+          <NavigationProperty Name="grupos" Relationship="Self.FK_grupos_cursos" FromRole="cursos" ToRole="grupos" />
+          <NavigationProperty Name="secciones" Relationship="Self.FK_secciones_cursospks" FromRole="cursos" ToRole="secciones" />
+        </EntityType>
+        <EntityType Name="grupos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="idcurso" Type="Int32" Nullable="false" />
+          <Property Name="cantidad_personas" Type="String" MaxLength="60" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="tiempo_duracion" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="cursos" Relationship="Self.FK_grupos_cursos" FromRole="grupos" ToRole="cursos" />
+          <NavigationProperty Name="horario" Relationship="Self.FK_horario_grupos" FromRole="grupos" ToRole="horario" />
+        </EntityType>
+        <EntityType Name="horario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id_profesor" Type="Int32" Nullable="false" />
+          <Property Name="id_grupo" Type="Int32" Nullable="false" />
+          <Property Name="HorarioN" Type="String" MaxLength="60" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="clases" Relationship="Self.FK_clases_horariopk" FromRole="horario" ToRole="clases" />
+          <NavigationProperty Name="grupos" Relationship="Self.FK_horario_grupos" FromRole="horario" ToRole="grupos" />
+          <NavigationProperty Name="profesores" Relationship="Self.FK_horario_clases" FromRole="horario" ToRole="profesores" />
+        </EntityType>
+        <EntityType Name="niveles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="NombreNivel" Type="String" MaxLength="60" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="clases" Relationship="Self.FK_clases_niveles" FromRole="niveles" ToRole="clases" />
+        </EntityType>
+        <EntityType Name="profesores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="clases" Relationship="Self.FK_clases_profesor" FromRole="profesores" ToRole="clases" />
+          <NavigationProperty Name="horario" Relationship="Self.FK_horario_clases" FromRole="profesores" ToRole="horario" />
+        </EntityType>
+        <EntityType Name="secciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="60" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="id_cursos" Type="Int32" Nullable="false" />
+          <Property Name="cantidad_cap" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="tiempo_duracion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cursos" Relationship="Self.FK_secciones_cursospks" FromRole="secciones" ToRole="cursos" />
+        </EntityType>
+        <Association Name="FK_clases_horariopk">
+          <End Role="horario" Type="Self.horario" Multiplicity="1" />
+          <End Role="clases" Type="Self.clases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="horario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clases">
+              <PropertyRef Name="idhorario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_clases_niveles">
+          <End Role="niveles" Type="Self.niveles" Multiplicity="1" />
+          <End Role="clases" Type="Self.clases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="niveles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clases">
+              <PropertyRef Name="idprofesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_clases_profesor">
+          <End Role="profesores" Type="Self.profesores" Multiplicity="1" />
+          <End Role="clases" Type="Self.clases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="profesores">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="clases">
+              <PropertyRef Name="idprofesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cursoDetalle_cursos">
+          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+          <End Role="cursoDetalle" Type="Self.cursoDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cursoDetalle">
+              <PropertyRef Name="idcurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_grupos_cursos">
+          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+          <End Role="grupos" Type="Self.grupos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupos">
+              <PropertyRef Name="idcurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_secciones_cursospks">
+          <End Role="cursos" Type="Self.cursos" Multiplicity="1" />
+          <End Role="secciones" Type="Self.secciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cursos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="secciones">
+              <PropertyRef Name="id_cursos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_horario_grupos">
+          <End Role="grupos" Type="Self.grupos" Multiplicity="1" />
+          <End Role="horario" Type="Self.horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="grupos">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="horario">
+              <PropertyRef Name="id_grupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_horario_clases">
+          <End Role="profesores" Type="Self.profesores" Multiplicity="1" />
+          <End Role="horario" Type="Self.horario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="profesores">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="horario">
+              <PropertyRef Name="id_profesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBAcademiaNEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="clases" EntityType="Self.clases" />
+          <EntitySet Name="cursoDetalle" EntityType="Self.cursoDetalle" />
+          <EntitySet Name="cursos" EntityType="Self.cursos" />
+          <EntitySet Name="grupos" EntityType="Self.grupos" />
+          <EntitySet Name="horario" EntityType="Self.horario" />
+          <EntitySet Name="niveles" EntityType="Self.niveles" />
+          <EntitySet Name="profesores" EntityType="Self.profesores" />
+          <EntitySet Name="secciones" EntityType="Self.secciones" />
+          <AssociationSet Name="FK_clases_horariopk" Association="Self.FK_clases_horariopk">
+            <End Role="horario" EntitySet="horario" />
+            <End Role="clases" EntitySet="clases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_clases_niveles" Association="Self.FK_clases_niveles">
+            <End Role="niveles" EntitySet="niveles" />
+            <End Role="clases" EntitySet="clases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_clases_profesor" Association="Self.FK_clases_profesor">
+            <End Role="profesores" EntitySet="profesores" />
+            <End Role="clases" EntitySet="clases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cursoDetalle_cursos" Association="Self.FK_cursoDetalle_cursos">
+            <End Role="cursos" EntitySet="cursos" />
+            <End Role="cursoDetalle" EntitySet="cursoDetalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_grupos_cursos" Association="Self.FK_grupos_cursos">
+            <End Role="cursos" EntitySet="cursos" />
+            <End Role="grupos" EntitySet="grupos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_secciones_cursospks" Association="Self.FK_secciones_cursospks">
+            <End Role="cursos" EntitySet="cursos" />
+            <End Role="secciones" EntitySet="secciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_horario_grupos" Association="Self.FK_horario_grupos">
+            <End Role="grupos" EntitySet="grupos" />
+            <End Role="horario" EntitySet="horario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_horario_clases" Association="Self.FK_horario_clases">
+            <End Role="profesores" EntitySet="profesores" />
+            <End Role="horario" EntitySet="horario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBAcademiaNModelStoreContainer" CdmEntityContainer="DBAcademiaNEntities">
+          <EntitySetMapping Name="clases">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.clases">
+              <MappingFragment StoreEntitySet="clases">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idhorario" ColumnName="idhorario" />
+                <ScalarProperty Name="idprofesor" ColumnName="idprofesor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cursoDetalle">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.cursoDetalle">
+              <MappingFragment StoreEntitySet="cursoDetalle">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idcurso" ColumnName="idcurso" />
+                <ScalarProperty Name="descripcion_corta" ColumnName="descripcion_corta" />
+                <ScalarProperty Name="descripcion_larga" ColumnName="descripcion_larga" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cursos">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.cursos">
+              <MappingFragment StoreEntitySet="cursos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="nivel" ColumnName="nivel" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="grupos">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.grupos">
+              <MappingFragment StoreEntitySet="grupos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="idcurso" ColumnName="idcurso" />
+                <ScalarProperty Name="cantidad_personas" ColumnName="cantidad_personas" />
+                <ScalarProperty Name="tiempo_duracion" ColumnName="tiempo_duracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="horario">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.horario">
+              <MappingFragment StoreEntitySet="horario">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_profesor" ColumnName="id_profesor" />
+                <ScalarProperty Name="id_grupo" ColumnName="id_grupo" />
+                <ScalarProperty Name="HorarioN" ColumnName="HorarioN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="niveles">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.niveles">
+              <MappingFragment StoreEntitySet="niveles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="NombreNivel" ColumnName="NombreNivel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="profesores">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.profesores">
+              <MappingFragment StoreEntitySet="profesores">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="secciones">
+            <EntityTypeMapping TypeName="DBAcademiaNModel.secciones">
+              <MappingFragment StoreEntitySet="secciones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_cursos" ColumnName="id_cursos" />
+                <ScalarProperty Name="cantidad_cap" ColumnName="cantidad_cap" />
+                <ScalarProperty Name="tiempo_duracion" ColumnName="tiempo duracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
